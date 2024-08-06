@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+
+# Custom directories to ignore
+KAH/
+KAHH/
+Normal/
+signal-v5-çizgili/
+
+# Specific files to ignore
+Labellar_efor_testi_bileske_anonim.xlsx
+deneme.jpeg
