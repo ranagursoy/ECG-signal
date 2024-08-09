@@ -10,9 +10,8 @@ __pycache__/
 .Python
 
 # Custom directories to ignore
-KAHH/
-Normal/
-signal-v5-çizgili/
+data/
+model_results/
 
 # Specific files to ignore
 Labellar_efor_testi_bileske_anonim.xlsx
