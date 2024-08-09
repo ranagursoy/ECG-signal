@@ -29,9 +29,9 @@ def convert_images_to_binary(input_folder, output_folder, threshold=128):
             print(f"Converted {file_name} to binary and saved to {output_folder}")
 
 
-input_folder = 'C:/Users/ranag/Downloads/signal-v5/noscale-data'
-grayscale_output_folder = 'C:/Users/ranag/Downloads/signal-v5/noscale-data-gray'
-binary_output_folder = 'C:/Users/ranag/Downloads/signal-v5/noscale-data-binary'
+input_folder = 'C:/Users/ranag/Downloads/all/all/train/KAH'
+grayscale_output_folder = 'C:/Users/ranag/Downloads/all/all/train/KAHgray'
+binary_output_folder = 'C:/Users/ranag/Downloads/all/all/train/KAHfinal'
 
 convert_images_to_grayscale(input_folder, grayscale_output_folder)
 convert_images_to_binary(input_folder, binary_output_folder)

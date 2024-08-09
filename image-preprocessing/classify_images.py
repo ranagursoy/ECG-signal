@@ -4,18 +4,18 @@ import pandas as pd
 import unicodedata
 
 # Excel dosyasını oku
-file_path = 'C:/Users/ranag/Documents/GitHub/EKG-signal/Labellar_efor_testi_bileske_anonim.xlsx'
+file_path = 'C:/Users/ranag/Documents/GitHub/EKG-signal/data/Labellar_efor_testi_bileske_anonim.xlsx'
 data = pd.read_excel(file_path)
 
 # Klasör adlarını belirleyin
-class_folders = ['KAH_v5', 'KKAH_v5', 'Normal_v5']
+class_folders = ['KAH', 'KKAH', 'Normal']
 
 # Her bir sınıf için klasör oluştur
 for folder in class_folders:
     os.makedirs(folder, exist_ok=True)
 
 # Resimlerin bulunduğu ana klasör yolu
-image_folder_path = 'C:/Users/ranag/Downloads/crop'
+image_folder_path = 'C:/Users/ranag/Desktop/ECG-Article/temizlenmis-tum-resim-warmup-recovery-ayrilmis-tum-datase/rawdata-çizgili/rawdata'
 
 # Dosyaları listele
 all_files = os.listdir(image_folder_path)
@@ -46,11 +46,11 @@ for index, row in data.iterrows():
     patient_files = [f for f in all_files if folder_name in normalize_text(f)]
 
     if row['KAH'] == 1:
-        destination_folder = 'KAH_v5'
+        destination_folder = 'KAH'
     elif row['KKAH'] == 1:
-        destination_folder = 'KKAH_v5'
+        destination_folder = 'KKAH'
     else:
-        destination_folder = 'Normal_v5'
+        destination_folder = 'Normal'
 
     for file in patient_files:
         source_path = os.path.join(image_folder_path, file)
