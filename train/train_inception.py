@@ -4,11 +4,11 @@ import pandas as pd
 from sklearn.metrics import confusion_matrix, classification_report
 import matplotlib.pyplot as plt
 import seaborn as sns
-from keras.models import Model
-from keras.layers import Dense, Dropout, GlobalAveragePooling2D
-from keras.applications.inception_v3 import InceptionV3
-from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
-from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Dropout, GlobalAveragePooling2D
+from tensorflow.keras.applications.inception_v3 import InceptionV3
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 
 # Enable GPU memory growth
@@ -33,29 +33,29 @@ train_datagen = ImageDataGenerator(
 test_val_datagen = ImageDataGenerator(rescale=1./255)
 
 # Directories for training, validation, and test sets
-train_dir = 'C:/Users/asil_/Desktop/EKG/tüm_ekg/çizgisiz/thr/eşitlenmiş/train'
-val_dir = 'C:/Users/asil_/Desktop/EKG/tüm_ekg/çizgisiz/thr/eşitlenmiş/val'
-test_dir = 'C:/Users/asil_/Desktop/EKG/tüm_ekg/çizgisiz/thr/eşitlenmiş/test'
+train_dir = 'C:/Users/ranag/Desktop/tüm_ekg/çizgisiz/thr/eşitlenmiş/train'
+val_dir = 'C:/Users/ranag/Desktop/tüm_ekg/çizgisiz/thr/eşitlenmiş/val'
+test_dir = 'C:/Users/ranag/Desktop/tüm_ekg/çizgisiz/thr/eşitlenmiş/test'
 
 # Flow data from directories
 train_generator = train_datagen.flow_from_directory(
     train_dir,
     target_size=(299, 299),
-    batch_size=16,
+    batch_size=64,
     class_mode='categorical'
 )
 
 val_generator = test_val_datagen.flow_from_directory(
     val_dir,
     target_size=(299, 299),
-    batch_size=16,
+    batch_size=64,
     class_mode='categorical'
 )
 
 test_generator = test_val_datagen.flow_from_directory(
     test_dir,
     target_size=(299, 299),
-    batch_size=16,
+    batch_size=64,
     class_mode='categorical',
     shuffle=False  # Important for getting correct labels when predicting
 )
@@ -64,11 +64,11 @@ test_generator = test_val_datagen.flow_from_directory(
 base_model = InceptionV3(weights='imagenet', include_top=False, input_shape=(299, 299, 3))
 
 # Freeze the first 20 layers of InceptionV3 to prevent them from being trained
-for layer in base_model.layers[:15]:
+for layer in base_model.layers[:3]:
     layer.trainable = False
 
 # Keep the rest of the layers trainable
-for layer in base_model.layers[15:]:
+for layer in base_model.layers[3:]:
     layer.trainable = True
 
 # Add custom layers on top
@@ -82,7 +82,7 @@ predictions = Dense(train_generator.num_classes, activation='softmax')(x)
 model = Model(inputs=base_model.input, outputs=predictions)
 
 # Compile the model
-model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.1), loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Directory for results
 results_dir = 'training_results_inception_9'
@@ -90,7 +90,7 @@ os.makedirs(results_dir, exist_ok=True)
 
 # Checkpoint to save the best model
 checkpoint_path = os.path.join(results_dir, 'best_model_inception.h5')
-checkpoint = ModelCheckpoint(checkpoint_path, save_best_only=True, monitor='val_loss', mode='min')
+checkpoint = ModelCheckpoint(checkpoint_path, save_best_only=True, monitor='val_loss', mode='min', save_weights_only=False)
 
 # Early stopping callback
 early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, mode='min')
@@ -170,4 +170,4 @@ report = classification_report(y_test_classes, Y_pred_classes, target_names=list
 with open(os.path.join(results_dir, 'classification_report_inception.txt'), 'w') as f:
     f.write(report)
 
-print("Model training and evaluation complete. Results saved in 'training_results_inception' directory.")
+print("Model training and evaluation complete. Results saved in 'training_results_inception_9' directory.")
